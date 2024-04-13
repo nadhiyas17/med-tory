@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "axios": "^1.6.8",
+    "react-notifications-component": "^4.0.1",
+    "sweetalert2": "^11.10.7"
+  }
+}
