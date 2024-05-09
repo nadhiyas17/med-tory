@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { UseAuth } from "../UseContext/Usecontextapi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
@@ -32,6 +33,21 @@ const Header = () => {
     }
   }, [loginUser, userRole]);
 
+  useEffect(() => {
+    // Fetch user data from an API
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/");
+        const userData = response.data;
+        console.log(userData); // You can do something with the user data here
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []); // This effect runs only once on component mount
+
   const handleAudioEnded = () => {
     // Display notification after audio ends
     // You can use your preferred notification library here
@@ -40,7 +56,7 @@ const Header = () => {
     // setTimeout(() => {
     //   swal.close();
     // }, 3000);
-    toast.success(`Welcome ${username}`,{position:"top-center"})
+    toast.success(`Welcome ${username}`, { position: "top-center" });
   };
 
   return (
@@ -63,11 +79,10 @@ const Header = () => {
             </div>
           </div>
 
-          <div className="navbar bg-info w-100 "></div>
+          {/* <div className="navbar bg-info w-100 "></div> */}
         </div>
-
       )}
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

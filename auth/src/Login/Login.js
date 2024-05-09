@@ -16,13 +16,12 @@ const Login = () => {
 
   const userInfo = UseAuth();
   const { loginUser, setLoginUser, userRole, setUserRole } = userInfo;
-  console.log(userRole);
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      password: "",
-      role: "",
+      name: "superadmin",
+      password: "supad@12",
+      role: "superadmin",
     },
 
     validationSchema: Yup.object({
@@ -46,15 +45,14 @@ const Login = () => {
       axios
         .get(`http://localhost:4000/${formik.values.role}/`)
         .then((response) => {
+          console.log(response);
           setLoginUser(response.data);
         })
         .catch((error) => {
-          console.error("Error fetching user data:", error);
+          console.error(error);
         });
     }
   }, [formik.values.role]);
-
-  // import { Store } from 'react-notifications-component';
 
   function handleSubmit(values) {
     const validUser = loginUser.find(
@@ -64,10 +62,32 @@ const Login = () => {
     if (!validUser) {
       setError("Invalid username or password.");
     } else {
-      navigate(`/${values.role}`);
-      setUserRole(validUser.username); // Changed to setUserRole
+      setUserRole(validUser.username);
+      // Navigate based on the selected role
+      switch (values.role) {
+        case "superadmin":
+          navigate("/superadmin");
+          break;
+        case "admin":
+          navigate("/admin");
+          break;
+        case "inventorystaff":
+          navigate("/inventorystaff/inventoryheader");
+          break;
+        case "supplier":
+          navigate("/supplier");
+          break;
+        case "viewer":
+          navigate("/viewer");
+          break;
+        default:
+          setError("Invalid role");
+          break;
+      }
       // Display welcome notification message
-      toast.success("welcome" + validUser.username, { position: "top-center" });
+      toast.success("Welcome " + validUser.username, {
+        position: "top-center",
+      });
     }
   }
 
@@ -75,11 +95,10 @@ const Login = () => {
     <>
       <div className="loginform">
         <h1>Login Page</h1>
-
         <mark>
           <small style={{ fontSize: "12px", textAlign: "center" }}>
-            <span style={{ color: "red" }}>Note:</span>Please select role before
-            filling username and password
+            <span style={{ color: "red" }}>Note:</span> Please select a role
+            before filling in the username and password.
           </small>
         </mark>
         <form onSubmit={formik.handleSubmit} className="mt-2">
@@ -92,10 +111,10 @@ const Login = () => {
           >
             <option value=""> Select Role</option>
             <option value="superadmin"> Super Admin</option>
-            <option value={formik.values.admin}> Admin</option>
+            <option value="admin"> Admin</option>
             <option value="inventorystaff"> Inventory Staff</option>
-            <option value="supplier"> supplier</option>
-            <option value={formik.values.viewer}> Viewer</option>
+            <option value="supplier"> Supplier</option>
+            <option value="viewer"> Viewer</option>
           </Form.Select>
           <div className="inputfield">
             <label>Username</label>

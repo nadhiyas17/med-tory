@@ -3,6 +3,8 @@ import Button from "react-bootstrap/Button";
 import Header from "./Header";
 import { UseAuth } from "../UseContext/Usecontextapi";
 import AdminUsers from "../Component/AdminUsers";
+import Navbar from "../Navbar/Navbar";
+import CommonNavbar from "../Navbar/CommonNavbar";
 
 function UserManagement() {
   const userInfo = UseAuth();
@@ -24,54 +26,97 @@ function UserManagement() {
     setDataShow(false);
   };
 
-  const handleRoles = (e) => {
-    setgetRole({ getRole, role: e.target.value });
+  const handleRoles = (event) => {
+    setgetRole({ getRole, role: event.target.value });
   };
 
   const validateForm = () => {
+    const errorMessages = {
+      username: {
+        required: "Username is required",
+        minLength: "Username must be at least 4 characters long",
+      },
+      password: {
+        required: "Password is required",
+        minLength: "Password must be at least 8 characters long",
+      },
+      email: {
+        required: "Email is required",
+        invalid: "Invalid email",
+      },
+      role: {
+        required: "Role is required",
+      },
+    };
+
     const errors = {};
 
     if (!userData.username || userData.username.trim() === "") {
-      errors.username = "Username is required";
-    } else if (userData.username.length > 40) {
-      errors.username = "Max Length is 40 Characters";
-    }
-
-    if (!userData.email || userData.email.trim() === "") {
-      errors.email = "Email is required";
-    } else if (!isValidEmail(userData.email)) {
-      errors.email = "Invalid email";
+      errors.username = errorMessages.username.required;
+    } else if (userData.username.length < 4) {
+      errors.username = errorMessages.username.minLength;
     }
 
     if (!userData.password || userData.password.trim() === "") {
-      errors.password = "Password is required";
+      errors.password = errorMessages.password.required;
+    } else if (userData.password.length < 8) {
+      errors.password = errorMessages.password.minLength;
+    }
+
+    if (!isValidEmail(userData.email)) {
+      errors.email = errorMessages.email.invalid;
+    } else if (!userData.email || userData.email.trim() === "") {
+      errors.email = errorMessages.email.required;
     }
 
     if (!userData.role || userData.role.trim() === "") {
-      errors.role = "Role is required";
+      errors.role = errorMessages.role.required;
     }
 
     setErrors(errors);
 
     return Object.keys(errors).length === 0;
   };
-// console.log(email)
+
   const isValidEmail = (email) => {
-    // Basic email validation regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  };
+
+  const handleSubmitForm = (event) => {
+    event.preventDefault();
+
+    if (validateForm()) {
+      handleSubmit(event); // Pass userData to handleSubmit function
+    } else {
+      console.log("Form submission failed due to validation errors.");
+    }
   };
 
   return (
     <>
       <Header />
+      <Navbar
+        home="/"
+        userTitle="User Management"
+        inventoryTitle="Inventory Management"
+        supplierTitle="Supplier Management"
+        orderTitle="Order Management"
+        viewerTitle="Viewer"
+      />
+      <CommonNavbar />
 
       <div className="user-container w-100">
         <h1 className="userheader">User Management Page</h1>
         <div className="d-flex justify-content-between m-3">
-          <button className="btn btn-primary " onClick={handleShow}>
-            Add User
-          </button>
+          {getRole.role === "superadmin" ? (
+            ""
+          ) : (
+            <button className="btn btn-primary " onClick={handleShow}>
+              Add User
+            </button>
+          )}
+
           <select onChange={handleRoles}>
             <option value="superadmin">Super Admin</option>
             <option value="admin">Admin</option>
@@ -84,7 +129,7 @@ function UserManagement() {
         <AdminUsers />
 
         {show && (
-          <form onSubmit={validateForm}>
+          <form onSubmit={handleSubmitForm}>
             <div className="p-2 col-lg-6 col-md-6 col-sm-12">
               <label htmlFor="username" className="form-label">
                 User Name <span>*</span>
@@ -101,9 +146,6 @@ function UserManagement() {
                     username: e.target.value.toLowerCase(),
                   })
                 }
-                required
-                maxLength={40}
-                minLength={5}
               />
               {errors.username && (
                 <span className="text-danger">{errors.username}</span>
@@ -125,7 +167,6 @@ function UserManagement() {
                     email: e.target.value.toLowerCase(),
                   })
                 }
-                required
               />
               {errors.email && (
                 <span className="text-danger">{errors.email}</span>
@@ -144,10 +185,9 @@ function UserManagement() {
                 onChange={(e) =>
                   setUserData({
                     ...userData,
-                    password: e.target.value.toLowerCase(),
+                    password: e.target.value,
                   })
                 }
-                required
               />
               {errors.password && (
                 <span className="text-danger">{errors.password}</span>
@@ -168,7 +208,6 @@ function UserManagement() {
                     role: e.target.value.toLowerCase(),
                   })
                 }
-                required
               >
                 <option value="">Select Role</option>
                 <option value="superadmin">Super Admin</option>
@@ -181,7 +220,7 @@ function UserManagement() {
                 <span className="text-danger">{errors.role}</span>
               )}
             </div>
-            <button type="submit" className=" btn btn-primary">
+            <button type="submit" className="btn btn-primary">
               Submit
             </button>
           </form>

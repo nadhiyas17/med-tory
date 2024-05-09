@@ -16,6 +16,7 @@ export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState({
     username: "",
     password: "",
+
     email: "",
     role: "",
   });
@@ -23,10 +24,20 @@ export const UserProvider = ({ children }) => {
   const [adminData, setAdmindata] = useState([]);
   const [show, setshow] = useState(false);
   const [dataShow, setDataShow] = useState(true);
-  const [loginUser, setLoginUser] = useState([]);
   const [userRole, setUserRole] = useState(""); // Changed to setUserRole
   const [userFormData, setuserFormData] = useState([]);
-  console.log(userFormData);
+  const [loginUser, setLoginUser] = useState([]);
+  const [logininventoryStaff, setInventoryStaff] = useState([]);
+  const [loginViewer, setViewer] = useState([]);
+  const [loginSupplier, setSupplier] = useState([]);
+  console.log(loginSupplier);
+  console.log(loginViewer);
+
+  console.log(logininventoryStaff);
+
+  console.log(loginUser);
+
+  // console.log(userFormData);
   const resetForm = () => {
     setUserData({
       username: "",
@@ -36,8 +47,8 @@ export const UserProvider = ({ children }) => {
     });
   };
   console.log(userData);
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    // event.preventDefault();
     alert("hi");
 
     switch (userData.role) {
@@ -47,6 +58,7 @@ export const UserProvider = ({ children }) => {
           .post(`http://localhost:4000/${userData.role}`, userData)
           .then((response) => {
             setuserFormData(response.data);
+            console.log(response.data);
 
             swal("Success", `Data added to ${userData.role}`, "success");
             // setUserData({
@@ -184,6 +196,14 @@ export const UserProvider = ({ children }) => {
         setUserRole,
         getRole,
         setgetRole,
+        handleSubmit,
+        getApiData,
+        setInventoryStaff,
+        setSupplier,
+        setViewer,
+        logininventoryStaff,
+        loginViewer,
+        loginSupplier,
       }}
     >
       {children}

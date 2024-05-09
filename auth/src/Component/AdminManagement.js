@@ -1,10 +1,16 @@
 import React from 'react'
 import Header from '../Login/Header'
+import Navbar from '../Navbar/Navbar'
 
 const AdminManagement = () => {
   return (
     <>
     <Header/>
+    <Navbar  home="/"
+        inventoryTitle="Inventory Management"
+        supplierTitle="Supplier Management"
+        orderTitle="Order Management"
+        viewerTitle="Viewer"/>
     <div> 
         <div className="containerdiv">
             <div className="row">

@@ -29,7 +29,7 @@ form {
 }
 
 .header {
-  height: 120px;
+  height: 70px;
   width: 100%;
   background-color: rgb(234, 241, 239);
   
@@ -116,4 +116,36 @@ body {
 .inputfield {
   height: 100px;
   margin: 10px 0;
+}
+.user-container {
+  margin: 20px;
+}
+
+.userheader {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.m-3 {
+  margin: 1rem !important;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.form-control {
+  margin-bottom: 10px;
+}
+
+.text-danger {
+  color: red;
 }

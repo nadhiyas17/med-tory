@@ -12,6 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+    
       <UserProvider>
         {/* <UpdateUser /> */}
       {/* <Header /> */}
@@ -19,6 +20,7 @@ root.render(
         <App />
       </UserProvider>
     </BrowserRouter>
+    
   </React.StrictMode>
 );
 
